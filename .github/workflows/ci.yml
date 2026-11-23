@@ -1,0 +1,36 @@
+name: CI
+
+# Tests only. This workflow does not publish, deploy, release or use any secret.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - uses: actions/setup-node@v4   # dashboard JS logic is tested in Node
+        with:
+          node-version: "20"
+      - name: Install project (declared, bounded dependencies)
+        run: python -m pip install -e ".[dev]"
+      - name: Byte-compile sources
+        run: python -m compileall -q src
+      - name: Run tests
+        # Tests that need locally built data panels (data/processed) skip themselves on CI.
+        run: python -m pytest -q -rs

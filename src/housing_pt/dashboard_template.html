@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acessibilidade à habitação em Portugal</title>
+<meta name="description" content="Medianas oficiais do INE de preços de venda, rendas e rendimento por município e NUTS III, com razões simples entre elas. Mapa interativo, tabela acessível, fontes e limitações.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%238a2f0c'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#fafaf8;--panel:#fff;--ink:#1d1d1b;--mute:#585852;--line:#cfcfc6;--accent:#8a2f0c;--nodata:#d4d4cc;--warn:#fff4e0;--warnline:#c28a1e;--focus:#0b57d0;--ctl:#7d7d73}
+@media (prefers-color-scheme:dark){:root{--bg:#161614;--panel:#1f1f1c;--ink:#ecece6;--mute:#b0b0a6;--line:#46463f;--accent:#f0a070;--nodata:#44443e;--warn:#2d2616;--warnline:#8a6a20;--focus:#8ab4f8;--ctl:#8a8a80}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header,main,footer{max-width:1180px;margin:0 auto;padding:0 16px}
+h1{font-size:1.45rem;margin:18px 0 2px}
+.sub{color:var(--mute);margin:0 0 12px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.controls label{display:flex;flex-direction:column;font-size:.8rem;color:var(--mute);gap:3px;flex:1 1 170px;min-width:0}
+select,input[type=range],button{font:inherit;color:var(--ink);max-width:100%}
+select,button{background:var(--bg);border:1px solid var(--ctl);border-radius:6px;padding:6px 8px;min-height:34px}
+button{cursor:pointer;flex:0 0 auto}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;margin:14px 0}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px;min-width:0}
+.card h2{font-size:1rem;margin:0 0 6px}
+svg{display:block;max-width:100%;height:auto}
+svg path{stroke:var(--panel);stroke-width:.35;cursor:pointer}
+svg path:hover,svg path.sel{stroke:var(--ink);stroke-width:1.4}
+.maps{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap}
+#m-mainland{width:min(380px,100%)}
+.insets{display:flex;flex-direction:column;gap:2px;min-width:0}
+@media (max-width:560px){.insets{flex-direction:row;flex-wrap:wrap;gap:10px}}
+.inset-t{font-size:.74rem;color:var(--mute);margin:0}
+#legend{margin-top:8px;font-size:.8rem;color:var(--mute)}
+#bar{height:10px;border-radius:5px;border:1px solid var(--line)}
+.lg{display:flex;justify-content:space-between;gap:8px}
+.warn{background:var(--warn);border:1px solid var(--warnline);border-radius:6px;padding:7px 9px;font-size:.85rem;margin:8px 0}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.84rem}
+th,td{padding:3px 6px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);padding:4px 8px;border-radius:5px;font-size:.8rem;display:none;z-index:9;max-width:260px}
+ul.src{font-size:.8rem;color:var(--mute);padding-left:16px;margin:4px 0}
+.small{font-size:.82rem;color:var(--mute)}
+a{color:var(--accent)}
+.sr{position:absolute;left:-9999px}
+.swatch{display:inline-block;width:10px;height:10px;background:var(--nodata);vertical-align:middle;border:1px solid var(--line)}
+td.l{text-align:left;white-space:normal}
+.skip{position:absolute;left:8px;top:-60px;background:var(--panel);color:var(--ink);border:2px solid var(--focus);border-radius:6px;padding:6px 10px;z-index:20}
+.skip:focus{top:8px}
+button.link{background:none;border:0;padding:0;min-height:0;color:var(--accent);text-decoration:underline;cursor:pointer;font:inherit;text-align:left}
+details>summary{cursor:pointer;font-weight:600;padding:2px 0}
+.tbl-wrap{max-height:420px;overflow:auto;margin-top:8px;border:1px solid var(--line);border-radius:6px}
+#tbl thead th{position:sticky;top:0;background:var(--panel)}
+#searchMsg{min-height:1.2em}
+.intro p{margin:4px 0}.intro ul{margin:6px 0 4px;padding-left:18px}
+.badge{display:inline-block;font-size:.74rem;border:1px solid var(--ctl);border-radius:999px;padding:1px 9px;color:var(--ink);margin:0 0 6px}
+.badge.ref{border-style:dashed}
+</style>
+</head>
+<body>
+<a class="skip" href="#controls">Saltar para os controlos</a>
+<header>
+<h1>Acessibilidade à habitação em Portugal</h1>
+<p class="sub">Preços de venda, rendas e rendimento mediano declarado por município e NUTS&nbsp;III. Medianas do INE; métricas descritivas, sem ranking nem índice composto.</p>
+</header>
+<main id="main">
+<section class="card intro" aria-label="Introdução">
+<p><b>Pergunta:</b> onde é que comprar ou arrendar casa em Portugal ficou mais ou menos acessível face aos rendimentos locais desde 2019? Este painel mostra medianas oficiais do INE por município e sub-região NUTS&nbsp;III e algumas razões simples entre elas.</p>
+<ul class="small">
+<li><b>Como usar:</b> escolha o nível geográfico, o indicador e o ano; clique numa área (ou use «Área selecionada») para ver a série 2019–2025. As cores têm escala fixa entre anos.</li>
+<li><b>Observado ou derivado:</b> preço, renda e rendimento são valores publicados; os restantes são cálculos nossos. Os marcados «com área de referência» dependem de um pressuposto de área que <b>você</b> escolhe, não de uma área observada.</li>
+<li><b>Três ressalvas:</b> o rendimento é «bruto declarado deduzido do IRS» por agregado fiscal (não é rendimento disponível e a base geográfica não está confirmada); a renda é a de <i>novos contratos</i> e falta em parte dos municípios; nada aqui descreve uma família concreta nem a elegibilidade para crédito. <a href="#metodologia">Ver metodologia e fontes</a>.</li>
+</ul>
+</section>
+<div class="controls" id="controls" role="group" aria-label="Controlos do mapa">
+<label for="level">Nível geográfico<select id="level"><option value="municipality">Município (308)</option><option value="nuts3">NUTS III (26)</option></select></label>
+<label for="metric">Indicador<select id="metric"></select></label>
+<label for="year">Ano<select id="year"></select></label>
+<label for="area" id="areaWrap"><span>Área de referência (pressuposto, não observada): <b id="areaVal">80</b> m²</span><input id="area" type="range" min="40" max="120" step="10" value="80" aria-valuetext="80 metros quadrados"></label>
+<label for="search">Pesquisar por nome<input id="search" type="search" list="unitList" autocomplete="off" placeholder="p. ex. Faro" aria-describedby="searchMsg"></label>
+<datalist id="unitList"></datalist>
+<label for="unitSel">Área selecionada<select id="unitSel"><option value="">— nenhuma —</option></select></label>
+<button id="csv" type="button">Descarregar CSV da vista</button>
+</div>
+<p id="searchMsg" class="small" aria-live="polite"></p>
+<div id="metricNote" class="warn" hidden></div>
+<div class="grid">
+<section class="card" aria-label="Mapa">
+<h2 id="mapTitle" aria-live="polite"></h2>
+<p class="badge" id="kindBadge"></p>
+<p class="small" id="levelNote"></p>
+<div class="maps">
+<svg id="m-mainland" role="img" aria-label="Mapa de Portugal continental. Use o seletor «Área selecionada» para escolher uma área pelo teclado."></svg>
+<div class="insets"><div><p class="inset-t">Açores</p><svg id="m-acores" role="img" aria-label="Mapa dos Açores"></svg></div><div><p class="inset-t">Madeira</p><svg id="m-madeira" role="img" aria-label="Mapa da Madeira"></svg></div></div>
+</div>
+<div id="legend"><div id="bar" role="img" aria-label="Escala de cores"></div><div class="lg"><span id="lgMin"></span><span id="lgMid"></span><span id="lgMax"></span></div>
+<div><span class="swatch"></span> sem dado publicado ou suprimido (não imputado). <span id="cov" aria-live="polite"></span></div></div>
+</section>
+<section class="card" aria-label="Detalhe da área selecionada">
+<h2 id="selTitle">Selecione uma área</h2>
+<div id="selBody" class="small">Clique numa área do mapa ou use o seletor «Área selecionada» para ver a série 2019–2025.</div>
+</section>
+</div>
+<section class="card" id="tabela" aria-label="Tabela da vista atual">
+<details id="tableView">
+<summary>Ver como tabela (alternativa acessível ao mapa)</summary>
+<p class="small" id="tblCaption"></p>
+<label for="tblFilter" class="small">Filtrar a tabela por nome<input id="tblFilter" type="search" autocomplete="off"></label>
+<div class="tbl-wrap"><table id="tbl"><thead><tr><th scope="col">Área</th><th scope="col" id="tblCol2">NUTS III</th><th scope="col">Valor</th><th scope="col">Unidade</th></tr></thead><tbody></tbody></table></div>
+<p class="small">Ordem alfabética (não é um ranking). «sem dado» = não publicado ou suprimido; nada é imputado. Use o nome para selecionar a área.</p>
+</details>
+</section>
+<section class="card" id="metodologia" aria-label="Metodologia e limitações">
+<h2>Como ler estes números</h2>
+<ul class="small">
+<li><b>Rendimento</b> = mediana, por <i>agregado fiscal</i>, do «rendimento bruto declarado deduzido do IRS liquidado» (INE, a partir de dados da Autoridade Tributária, IRS Modelo&nbsp;3). Definições do INE: o rendimento bruto declarado é o rendimento não isento antes das deduções específicas nas categorias A e H, e líquido dessas deduções nas restantes; o IRS liquidado é a coleta líquida, antes de retenções e pagamentos por conta. <b>Não é rendimento disponível</b>, e um agregado fiscal não é um agregado doméstico. A base geográfica (por exemplo, residência fiscal) <b>não está confirmada</b> nas fontes do INE consultadas; as contribuições para a Segurança Social não são mencionadas na definição.</li>
+<li><b>Preço</b> = mediana das vendas dos últimos 12 meses (€/m²), valor do 4.º trimestre de cada ano. <b>Renda</b> = mediana de <i>novos contratos</i> (metodologia 2026): custo de entrada no mercado, não a renda paga por inquilinos existentes. Mais de 20&nbsp;% dos municípios não têm renda publicada, sobretudo municípios com preços e rendimentos mais baixos (a dimensão do mercado não foi medida).</li>
+<li><b>I2</b> (anos de rendimento) = área × preço ÷ rendimento. A <b>área é um pressuposto</b> escolhido por si, não a área média observada das habitações; altera os níveis, não a ordenação.</li>
+<li><b>I3</b> é um <b>proxy relativo</b> (custo anual de arrendar a área de referência à renda mediana de novos contratos, em % do rendimento mediano), não uma taxa de esforço convencional. <b>I4</b> é a razão entre duas medianas de populações de alojamentos diferentes (novos contratos e vendas); <b>não é</b> uma rentabilidade de investimento realizada.</li>
+<li><b>I6</b> = ln(valor<sub>t</sub>/valor<sub>base</sub>) − ln(rendimento<sub>t</sub>/rendimento<sub>base</sub>). Preço e rendimento usam o mesmo deflator (IPC, base 2025=100), por isso I6 é igual em termos nominais e reais. Base 2019 (preço) ou 2020 (renda).</li>
+<li>Os valores NUTS&nbsp;III são medianas publicadas pelo INE, <b>não</b> calculadas a partir dos municípios. Medianas municipais pequenas têm ruído amostral desconhecido (o INE não publica intervalos de confiança). Segundas habitações, turismo e compradores não residentes influenciam os valores locais.</li>
+<li>Estes dados descrevem áreas: <b>não</b> descrevem a situação de uma família concreta nem a elegibilidade para crédito.</li>
+</ul>
+<h2>Glossário de indicadores</h2>
+<div class="tw"><table id="gloss"></table></div>
+<h2>Fontes</h2>
+<ul class="src" id="src"></ul>
+<p class="small">Fonte: Instituto Nacional de Estatística – Portugal (Statistics Portugal), CC&nbsp;BY&nbsp;4.0. Valores originais não modificados; métricas calculadas pelo autor. Informação geográfica cedida pela Direção-Geral do Território (CAOP&nbsp;2025, CC&nbsp;BY&nbsp;4.0), geometria simplificada para visualização. IPC (INE, base 2025) para valores reais.</p>
+</section>
+</main>
+<footer><p class="small">Projeto HOUSING-PT · versão preliminar · gerado pelo pipeline Python do repositório.</p></footer>
+<div id="tip"></div>
+<script>
+const DATA=/*__DATA__*/null;
+// ==CORE-START== (pure logic; unit-tested in Node by tests/test_dashboard_js.py)
+const ok=v=>v!==null&&v!==undefined&&isFinite(v);
+const nf=d=>new Intl.NumberFormat("pt-PT",{maximumFractionDigits:d,minimumFractionDigits:d});
+const f0=nf(0),f1=nf(1),f2=nf(2);
+const ln=Math.log;
+// Metric registry. fn(unit, yearIndex, areaM2) -> number|null. No extrapolation: missing inputs give null.
+const M={
+ i2:{kind:"ref",label:"Anos de rendimento para uma área de referência (I2)",unit:"anos",fmt:f1,area:1,need:"preço e rendimento (rendimento só até 2024)",fn:(u,i,A)=>ok(u.P[i])&&ok(u.Y[i])?A*u.P[i]/u.Y[i]:null},
+ i1:{kind:"der",label:"m² por ano de rendimento (I1)",unit:"m²/ano",fmt:f1,rev:1,need:"preço e rendimento (rendimento só até 2024)",fn:(u,i)=>ok(u.P[i])&&ok(u.Y[i])?u.Y[i]/u.P[i]:null},
+ i3:{kind:"ref",label:"Proxy renda/rendimento para a área de referência (I3)",unit:"% do rendimento anual",fmt:f0,area:1,need:"renda (desde 2020) e rendimento (até 2024)",
+     note:"Proxy relativo: custo anual de arrendar a área de referência à renda mediana de novos contratos, em % do rendimento mediano por agregado fiscal. Não é uma taxa de esforço convencional nem é comparável a limiares de 30 % ou 40 %; use apenas para comparar áreas e anos entre si.",
+     fn:(u,i,A)=>ok(u.R[i])&&ok(u.Y[i])?100*12*A*u.R[i]/u.Y[i]:null},
+ i4:{kind:"der",label:"Renda anualizada ÷ preço (I4)",unit:"% ao ano",fmt:f1,need:"renda (desde 2020) e preço",
+     note:"Razão de duas medianas de populações de alojamentos diferentes (novos contratos e vendas). Não é uma rentabilidade de investimento realizada.",
+     fn:(u,i)=>ok(u.R[i])&&ok(u.P[i])?100*12*u.R[i]/u.P[i]:null},
+ i6p:{kind:"der",label:"Preço vs. rendimento, variação desde 2019 (I6)",unit:"log-diferença",fmt:f2,div:1,need:"preço e rendimento em 2019 e no ano (rendimento até 2024)",
+      note:"Positivo = o preço mediano cresceu mais do que o rendimento mediano desde 2019 (valor 0 em 2019, o ano-base). Em municípios pequenos pode refletir ruído.",
+      fn:(u,i)=>ok(u.P[i])&&ok(u.Y[i])&&ok(u.P[0])&&ok(u.Y[0])?ln(u.P[i]/u.P[0])-ln(u.Y[i]/u.Y[0]):null},
+ i6r:{kind:"der",label:"Renda vs. rendimento, variação desde 2020 (I6)",unit:"log-diferença",fmt:f2,div:1,need:"renda e rendimento em 2020 e no ano (rendimento até 2024)",
+      note:"Positivo = a renda de novos contratos cresceu mais do que o rendimento mediano desde 2020 (valor 0 em 2020, o ano-base). Só áreas com renda publicada em 2020 e no ano.",
+      fn:(u,i)=>ok(u.R[i])&&ok(u.Y[i])&&ok(u.R[1])&&ok(u.Y[1])?ln(u.R[i]/u.R[1])-ln(u.Y[i]/u.Y[1]):null},
+ price:{kind:"obs",label:"Preço mediano de venda (nominal)",unit:"€/m²",fmt:f0,need:"preço",fn:(u,i)=>ok(u.P[i])?u.P[i]:null},
+ pricer:{kind:"obsdef",label:"Preço mediano de venda (euros de 2025)",unit:"€/m² de 2025",fmt:f0,need:"preço",fn:(u,i)=>ok(u.P[i])?u.P[i]*100/DATA.cpi[i]:null},
+ rent:{kind:"obs",label:"Renda mediana de novos contratos (nominal)",unit:"€/m²/mês",fmt:f2,need:"renda (desde 2020)",fn:(u,i)=>ok(u.R[i])?u.R[i]:null},
+ income:{kind:"obs",label:"Rendimento mediano declarado após IRS, por agregado fiscal",unit:"€/ano",fmt:f0,need:"rendimento (só até 2024)",fn:(u,i)=>ok(u.Y[i])?u.Y[i]:null}
+};
+const KINDS={obs:"Observado: mediana publicada pelo INE",obsdef:"Observado, deflacionado pelo IPC (base 2025)",der:"Derivado de valores observados (cálculo nosso, sem pressuposto de área)",ref:"Derivado com área de referência (pressuposto seu, não observado)"};
+const KIND_GROUPS=[["Observados (medianas do INE)",["obs","obsdef"]],["Derivados de valores observados",["der"]],["Derivados com área de referência (pressuposto)",["ref"]]];
+const qcsv=s=>'"'+String(s).replace(/"/g,'""')+'"';
+// RFC 4180 CSV: comma-separated, '.' decimals, empty cell = no published value (never zero-filled).
+function csvText(units,level,mk,yi,A){
+  const m=M[mk],lines=["nivel,id,nome,nuts3,nuts2,ano,indicador,unidade,area_referencia_m2,valor,fonte"];
+  for(const u of units){const v=m.fn(u,yi,A);
+    lines.push([level,u.id,qcsv(u.name),qcsv(u.nuts3),qcsv(u.nuts2),DATA.years[yi],mk,qcsv(m.unit),m.area?A:"",ok(v)?+v.toFixed(6):"","INE (CC BY 4.0); metricas do autor"].join(","))}
+  return "﻿"+lines.join("\r\n")+"\r\n";
+}
+// Glossary: definition and reference period of every indicator (units come from M).
+const GLOSS={
+ price:{def:"Mediana, em €/m², das vendas de alojamentos familiares nos 12 meses anteriores (categoria Total); valor do 4.º trimestre de cada ano.",ref:"2019–2025"},
+ pricer:{def:"O mesmo preço, deflacionado pelo IPC anual de Portugal (INE, base 2025=100).",ref:"2019–2025"},
+ rent:{def:"Mediana da renda mensal por m² dos novos contratos de arrendamento (metodologia 2026).",ref:"2020–2025"},
+ income:{def:"Mediana, por agregado fiscal, do rendimento bruto declarado deduzido do IRS liquidado (INE, dados da AT). Não é rendimento disponível.",ref:"2018–2024 (mostrado 2019–2024)"},
+ i1:{def:"Rendimento mediano ÷ preço mediano por m²: metros quadrados por ano de rendimento.",ref:"2019–2024"},
+ i2:{def:"Área de referência × preço por m² ÷ rendimento: anos de rendimento para a área escolhida.",ref:"2019–2024"},
+ i3:{def:"12 × área de referência × renda por m² ÷ rendimento anual: proxy relativo, não uma taxa de esforço.",ref:"2020–2024"},
+ i4:{def:"12 × renda por m² ÷ preço por m²: razão de medianas de populações diferentes; não é rentabilidade.",ref:"2020–2025"},
+ i6p:{def:"ln(preço_t ÷ preço_2019) − ln(rendimento_t ÷ rendimento_2019).",ref:"2019–2024"},
+ i6r:{def:"ln(renda_t ÷ renda_2020) − ln(rendimento_t ÷ rendimento_2020).",ref:"2020–2024"}
+};
+// Accent- and case-insensitive name matching for the search box.
+const norm=s=>String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+function findUnit(units,q){
+  const n=norm(q);if(!n)return {match:null,count:0};
+  const exact=units.filter(u=>norm(u.name)===n);
+  if(exact.length===1)return {match:exact[0],count:1};
+  const part=units.filter(u=>norm(u.name).includes(n));
+  return {match:part.length===1?part[0]:null,count:part.length};
+}
+// Rows of the accessible table: alphabetical by name (never sorted by value); missing values stay "sem dado".
+function tableRows(units,mk,yi,A,filter){
+  const m=M[mk],n=norm(filter||"");
+  return units.filter(u=>!n||norm(u.name).includes(n)).map(u=>{const v=m.fn(u,yi,A);
+    return {id:u.id,name:u.name,nuts3:u.nuts3,nuts2:u.nuts2,value:ok(v)?v:null,text:ok(v)?m.fmt.format(v):"sem dado"}})
+    .sort((a,b)=>a.name.localeCompare(b.name,"pt"));
+}
+// ==CORE-END==
+const $=id=>document.getElementById(id);
+const S={level:"municipality",metric:"i2",yi:DATA.years.indexOf(2024),A:80,sel:null};
+const lerp=(a,b,t)=>a.map((x,k)=>Math.round(x+(b[k]-x)*t));
+const hex=h=>[1,3,5].map(k=>parseInt(h.substr(k,2),16));
+const SEQ=[hex("#fff7bc"),hex("#f0a43c"),hex("#b23a10"),hex("#5c1a06")], DIV=[hex("#2166ac"),hex("#f7f7f2"),hex("#b2182b")];
+function ramp(stops,t){t=Math.max(0,Math.min(1,t));const n=stops.length-1,p=t*n,i=Math.min(n-1,Math.floor(p));const c=lerp(stops[i],stops[i+1],p-i);return `rgb(${c})`}
+function units(){return DATA[S.level]}
+function domain(m){ // fixed across years so colours are comparable
+  const vals=[];for(const u of units())for(let i=0;i<DATA.years.length;i++){const v=M[m].fn(u,i,S.A);if(ok(v))vals.push(v)}
+  vals.sort((a,b)=>a-b);if(!vals.length)return [0,1];
+  const q=p=>vals[Math.min(vals.length-1,Math.max(0,Math.round(p*(vals.length-1))))];
+  let lo=q(.02),hi=q(.98);if(M[m].div){const a=Math.max(Math.abs(lo),Math.abs(hi))||1;lo=-a;hi=a}
+  if(hi===lo)hi=lo+1;
+  return [lo,hi];
+}
+let paths={},DOM=[0,1];
+function color(v){const m=M[S.metric];if(!ok(v))return "var(--nodata)";let t=(v-DOM[0])/(DOM[1]-DOM[0]);if(m.rev)t=1-t;return ramp(m.div?DIV:SEQ,t)}
+function fillUnitSelect(){const dl=$("unitList");dl.innerHTML="";const sel=$("unitSel");sel.innerHTML='<option value="">— nenhuma —</option>';
+  [...units()].sort((a,b)=>a.name.localeCompare(b.name,"pt")).forEach(u=>{const o=document.createElement("option");o.value=u.id;o.textContent=u.name;sel.appendChild(o);const d=document.createElement("option");d.value=u.name;dl.appendChild(d)});sel.value=S.sel||""}
+function select(id){S.sel=id||null;$("unitSel").value=S.sel||"";if(S.sel)showSel();else clearSel();mark()}
+function clearSel(){$("selTitle").textContent="Selecione uma área";$("selBody").textContent="Clique numa área do mapa ou use o seletor «Área selecionada» para ver a série 2019–2025."}
+function draw(){
+  for(const g of ["mainland","acores","madeira"]){const svg=$("m-"+g),[w,h]=DATA.panels[g];svg.setAttribute("viewBox",`0 0 ${w} ${h}`);if(g!=="mainland")svg.setAttribute("width",w);svg.innerHTML=""}
+  paths={};
+  for(const u of units()){const svg=$("m-"+u.group);const p=document.createElementNS("http://www.w3.org/2000/svg","path");
+    p.setAttribute("d",u.d);p.dataset.id=u.id;
+    p.addEventListener("mousemove",e=>tip(e,u));p.addEventListener("mouseleave",()=>$("tip").style.display="none");
+    p.addEventListener("click",()=>select(u.id));svg.appendChild(p);paths[u.id]=p}
+  fillUnitSelect();paint();mark();
+}
+function paint(){
+  const m=M[S.metric];DOM=domain(S.metric);let n=0;
+  for(const u of units()){const v=m.fn(u,S.yi,S.A);if(ok(v))n++;paths[u.id].setAttribute("fill",color(v))}
+  const A=m.area?` (${S.A} m²)`:"",yr=DATA.years[S.yi];
+  $("mapTitle").textContent=`${m.label}${A} · ${yr} · ${S.level==="municipality"?"municípios":"NUTS III"}`;
+  const kb=$("kindBadge");kb.textContent=KINDS[m.kind];kb.classList.toggle("ref",m.kind==="ref");
+  $("levelNote").textContent=S.level==="nuts3"?"Valores NUTS III: medianas publicadas pelo INE, não calculadas a partir dos municípios.":"Valores municipais: medianas publicadas pelo INE.";
+  $("cov").textContent=n?`Com dado: ${n}/${units().length}.`:`Sem dados neste ano: este indicador requer ${m.need}.`;
+  const rev=m.rev,stops=m.div?DIV:SEQ,cs=[];for(let k=0;k<=10;k++)cs.push(ramp(stops,rev?1-k/10:k/10));
+  $("bar").style.background=`linear-gradient(90deg,${cs.join(",")})`;
+  $("lgMin").textContent=m.fmt.format(DOM[0]);$("lgMid").textContent=m.unit;$("lgMax").textContent=m.fmt.format(DOM[1]);
+  const note=$("metricNote");note.hidden=!m.note;note.textContent=m.note||"";
+  $("areaWrap").style.display=m.area?"flex":"none";
+  if(S.sel)showSel();
+  renderTable();
+}
+function renderTable(){
+  if(!$("tableView").open)return;
+  const m=M[S.metric],rows=tableRows(units(),S.metric,S.yi,S.A,$("tblFilter").value);
+  $("tblCaption").textContent=`${m.label}${m.area?` (${S.A} m²)`:""} · ${DATA.years[S.yi]} · ${S.level==="municipality"?"municípios":"NUTS III"} · ${rows.length} linhas`;
+  $("tblCol2").textContent=S.level==="municipality"?"NUTS III":"NUTS II";
+  const tb=$("tbl").tBodies[0];tb.innerHTML="";
+  for(const r of rows){const tr=tb.insertRow();const th=document.createElement("th");th.scope="row";
+    const b=document.createElement("button");b.type="button";b.className="link";b.textContent=r.name;b.onclick=()=>{select(r.id);$("selTitle").scrollIntoView({block:"nearest"})};th.appendChild(b);tr.appendChild(th);
+    tr.insertCell().textContent=S.level==="municipality"?r.nuts3:r.nuts2;const c=tr.insertCell();c.textContent=r.text;c.style.textAlign="right";tr.insertCell().textContent=r.value===null?"":m.unit}
+}
+function search(){
+  const q=$("search").value,msg=$("searchMsg");if(!norm(q)){msg.textContent="";return}
+  const r=findUnit(units(),q);
+  if(r.match){select(r.match.id);msg.textContent=`Selecionado: ${r.match.name}.`}
+  else msg.textContent=r.count?`${r.count} áreas contêm «${q}»: escolha uma da lista ou escreva mais letras.`:`Sem resultados para «${q}» neste nível geográfico.`;
+}
+function mark(){for(const k in paths)paths[k].classList.toggle("sel",k===S.sel)}
+function tip(e,u){const v=M[S.metric].fn(u,S.yi,S.A),t=$("tip");t.style.display="block";t.style.left=(e.clientX+12)+"px";t.style.top=(e.clientY+12)+"px";
+  t.innerHTML=`<b>${u.name}</b><br>${u.nuts3}${u.nuts2===u.nuts3?"":" · "+u.nuts2}<br>${ok(v)?M[S.metric].fmt.format(v)+" "+M[S.metric].unit:"sem dado"}`}
+function showSel(){
+  const u=units().find(x=>x.id===S.sel);if(!u)return;
+  $("selTitle").textContent=u.name+(S.level==="municipality"?` — ${u.nuts3}`:"");
+  const rows=[["Preço (€/m²)","price",f0],["Renda nova (€/m²/mês)","rent",f2],["Rendimento (€/ano)","income",f0],
+    [`I2 anos (${S.A} m²)`,"i2",f1],[`I3 % (${S.A} m²)`,"i3",f0],["I6 preço vs rend.","i6p",f2],["I6 renda vs rend.","i6r",f2]];
+  let h='<div class="tw"><table><thead><tr><th scope="col">Indicador</th>'+DATA.years.map(y=>`<th scope="col">${y}</th>`).join("")+"</tr></thead><tbody>";
+  for(const [lab,k,f] of rows){h+=`<tr><th scope="row">${lab}</th>`+DATA.years.map((y,i)=>{const v=M[k].fn(u,i,S.A);return `<td>${ok(v)?f.format(v):"–"}</td>`}).join("")+"</tr>"}
+  h+="</tbody></table></div><p class='small'>«–» = sem dado publicado/suprimido ou sem ano de base. O rendimento só existe até 2024 e a renda desde 2020. Valores não imputados nem extrapolados.</p>";
+  $("selBody").innerHTML=h;
+}
+function csv(){
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csvText(units(),S.level,S.metric,S.yi,S.A)],{type:"text/csv;charset=utf-8"}));
+  a.download=`housing_pt_${S.level}_${S.metric}${M[S.metric].area?"_"+S.A+"m2":""}_${DATA.years[S.yi]}.csv`;a.click();
+}
+// init
+for(const [gl,kinds] of KIND_GROUPS){const og=document.createElement("optgroup");og.label=gl;for(const k in M){if(!kinds.includes(M[k].kind))continue;const o=document.createElement("option");o.value=k;o.textContent=M[k].label;og.appendChild(o)}$("metric").appendChild(og)}
+DATA.years.forEach((y,i)=>{const o=document.createElement("option");o.value=i;o.textContent=y;$("year").appendChild(o)});
+$("year").value=S.yi;$("metric").value=S.metric;
+$("level").onchange=e=>{S.level=e.target.value;S.sel=null;clearSel();draw()};
+$("metric").onchange=e=>{S.metric=e.target.value;paint()};
+$("year").onchange=e=>{S.yi=+e.target.value;paint()};
+$("area").oninput=e=>{S.A=+e.target.value;$("areaVal").textContent=S.A;e.target.setAttribute("aria-valuetext",S.A+" metros quadrados");paint()};
+$("unitSel").onchange=e=>select(e.target.value);
+$("csv").onclick=csv;
+$("search").addEventListener("input",search);
+$("tableView").addEventListener("toggle",renderTable);
+$("tblFilter").addEventListener("input",renderTable);
+$("gloss").innerHTML="<thead><tr><th scope='col'>Indicador</th><th scope='col'>Definição</th><th scope='col'>Unidade</th><th scope='col'>Período de referência</th><th scope='col'>Tipo</th></tr></thead><tbody>"+
+  Object.keys(M).map(k=>`<tr><th scope="row">${M[k].label}</th><td class="l">${GLOSS[k].def}</td><td>${M[k].unit}</td><td>${GLOSS[k].ref}</td><td class="l">${KINDS[M[k].kind]}</td></tr>`).join("")+"</tbody>";
+(function(){ // optional deep link, read-only: #level=nuts3&metric=i3&year=2024&area=80&sel=<id>
+  const h=new URLSearchParams(location.hash.slice(1));
+  if(h.get("level")==="nuts3"){S.level="nuts3";$("level").value="nuts3"}
+  if(h.get("metric")&&M[h.get("metric")]){S.metric=h.get("metric");$("metric").value=S.metric}
+  const yi=DATA.years.indexOf(+h.get("year"));if(yi>=0){S.yi=yi;$("year").value=yi}
+  const a=+h.get("area");if(a>=40&&a<=120&&a%10===0){S.A=a;$("area").value=a;$("areaVal").textContent=a}
+  if(h.get("sel"))S.sel=h.get("sel");
+  if(h.get("table")==="1")$("tableView").open=true;
+})();
+$("src").innerHTML=DATA.sources.map(s=>`<li>INE, indicador ${s.code} — ${s.title}; período de referência ${s.first}–${s.last}; atualizado ${s.updated}; acedido ${s.retrieved}.</li>`).join("");
+window.__app={S,M,DATA,units,csvText,findUnit,tableRows,GLOSS};
+draw();
+</script>
+</body>
+</html>

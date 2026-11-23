@@ -1,0 +1,58 @@
+[
+  {
+    "code": "0012234",
+    "title": "Median value of dwellings sales in the last 12 months (Methodology 2022 - \u20ac/ m\u00b2) by Geographic location (NUTS - 2024) and Category of housing unit; Quarterly - Statistics on house prices at local level (Methodology 2022)",
+    "unit": "Euro/ Square metre (\u20ac/ m\u00b2)",
+    "first_period": "4th Quarter 2019",
+    "last_period": "2nd Quarter 2026",
+    "ine_last_update": "2026-10-23",
+    "note": null,
+    "data_url": "https://www.ine.pt/ine/json_indicador/pindica.jsp?op=2&varcd=0012234&Dim1=T&lang=EN",
+    "meta_url": "https://www.ine.pt/ine/json_indicador/pindicaMeta.jsp?varcd=0012234&lang=EN",
+    "data_sha256": "a1d2fff14081eaf3ff578f9aadca36ef632167610807ba01d42bffd7c964c1ee",
+    "retrieved_at": "2026-11-22T22:42:31.692161+00:00",
+    "licence": "CC BY 4.0 - Source: Instituto Nacional de Estatistica - Portugal (Statistics Portugal)"
+  },
+  {
+    "code": "0014698",
+    "title": "Median house rental value of new lease agreements of household dwellings (2026 Methodology - \u20ac/ m\u00b2) by Geographic localization (NUTS - 2024); Annual - Statistics Portugal, House rental statistics at local level",
+    "unit": "Euro/ Square metre (\u20ac/ m\u00b2)",
+    "first_period": "2020",
+    "last_period": "2025",
+    "ine_last_update": "2026-09-29",
+    "note": null,
+    "data_url": "https://www.ine.pt/ine/json_indicador/pindica.jsp?op=2&varcd=0014698&Dim1=T&lang=EN",
+    "meta_url": "https://www.ine.pt/ine/json_indicador/pindicaMeta.jsp?varcd=0014698&lang=EN",
+    "data_sha256": "67f87129409529960d712b25f2ff48f96b4b747595e3eb09e20f3aa8e0aa175d",
+    "retrieved_at": "2026-11-22T22:42:33.977795+00:00",
+    "licence": "CC BY 4.0 - Source: Instituto Nacional de Estatistica - Portugal (Statistics Portugal)"
+  },
+  {
+    "code": "0012741",
+    "title": "Median value of gross reported income less personal income paid tax per tax household (\u20ac) by Geographic localization (NUTS - 2024); Annual - Statistics Portugal, Income Statistics at local level produced by Ministry of Finance - Tax and Customs Authority",
+    "unit": "Euro (\u20ac)",
+    "first_period": "2018",
+    "last_period": "2024",
+    "ine_last_update": "2026-07-24",
+    "note": "The information excludes tax households with gross reported income less personal income paid tax less than zero.",
+    "data_url": "https://www.ine.pt/ine/json_indicador/pindica.jsp?op=2&varcd=0012741&Dim1=T&lang=EN",
+    "meta_url": "https://www.ine.pt/ine/json_indicador/pindicaMeta.jsp?varcd=0012741&lang=EN",
+    "data_sha256": "26ac4b8986036dd331b563c9c122a487b51fb0685fe32d970ba33d5b9e095324",
+    "retrieved_at": "2026-11-22T22:42:36.785953+00:00",
+    "licence": "CC BY 4.0 - Source: Instituto Nacional de Estatistica - Portugal (Statistics Portugal)"
+  },
+  {
+    "code": "0014642",
+    "title": "Consumer price index (CPI, Base - 2025) by Geographic localization and Special aggregates; Annual - Statistics Portugal, Consumer price index",
+    "unit": "No applicable (-)",
+    "first_period": "1948",
+    "last_period": "2025",
+    "ine_last_update": "2026-02-11",
+    "note": null,
+    "data_url": "https://www.ine.pt/ine/json_indicador/pindica.jsp?op=2&varcd=0014642&Dim1=T&lang=EN",
+    "meta_url": "https://www.ine.pt/ine/json_indicador/pindicaMeta.jsp?varcd=0014642&lang=EN",
+    "data_sha256": "2ea7c328e429188b6ce2aa212fb8994a93987e21815db055edee2e78e000160f",
+    "retrieved_at": "2026-11-22T22:51:07.555640+00:00",
+    "licence": "CC BY 4.0 - Source: Instituto Nacional de Estatistica - Portugal (Statistics Portugal)"
+  }
+]

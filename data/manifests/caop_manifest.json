@@ -1,0 +1,44 @@
+{
+  "files": [
+    {
+      "region": "Continente",
+      "url": "https://geo2.dgterritorio.gov.pt/caop/CAOP_Continente_2025-gpkg.zip",
+      "file": "CAOP_Continente_2025-gpkg.zip",
+      "bytes": 111647845,
+      "sha256": "87cd67f4b1fbadf23d9324e6fb231ff05531e4db347af36ccc7c6cbabe3ecd1d",
+      "accessed": "2026-11-22",
+      "licence": "CC BY 4.0 (dados.gov.pt / DGT dados abertos)",
+      "attribution": "Informação geográfica cedida pela Direção-Geral do Território",
+      "version": "CAOP2025"
+    },
+    {
+      "region": "Acores",
+      "url": "https://geo2.dgterritorio.gov.pt/caop/CAOP_RAA_2025-gpkg.zip",
+      "file": "CAOP_RAA_2025-gpkg.zip",
+      "bytes": 15909724,
+      "sha256": "b0e3b4fe5544647eb4593e0222c6430fae7e50c97f953d8ceae10707c4df9dcf",
+      "accessed": "2026-11-22",
+      "licence": "CC BY 4.0 (dados.gov.pt / DGT dados abertos)",
+      "attribution": "Informação geográfica cedida pela Direção-Geral do Território",
+      "version": "CAOP2025"
+    },
+    {
+      "region": "Madeira",
+      "url": "https://geo2.dgterritorio.gov.pt/caop/CAOP_RAM_2025-gpkg.zip",
+      "file": "CAOP_RAM_2025-gpkg.zip",
+      "bytes": 15235290,
+      "sha256": "ae568ca2006e91205601309ff46bc8ae0cc73236165f095f8aa99a5b9a17e5d6",
+      "accessed": "2026-11-22",
+      "licence": "CC BY 4.0 (dados.gov.pt / DGT dados abertos)",
+      "attribution": "Informação geográfica cedida pela Direção-Geral do Território",
+      "version": "CAOP2025"
+    }
+  ],
+  "join_check_dico": {
+    "both": 308,
+    "ine_only": 0,
+    "caop_only": 0,
+    "name_equal": 304,
+    "nuts3_name_equal": 308
+  }
+}

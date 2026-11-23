@@ -1,0 +1,105 @@
+{
+ "moran": [
+  {
+   "variable": "ln_i2",
+   "n": 273,
+   "morans_I": 0.7653618277145828,
+   "p_sim": 0.001
+  },
+  {
+   "variable": "i6_price_vs_income_real",
+   "n": 259,
+   "morans_I": 0.4188046675374039,
+   "p_sim": 0.001
+  }
+ ],
+ "kruskal_nuts2": [
+  {
+   "metric": "i2_years_80m2",
+   "n_municipalities": 299,
+   "n_groups": 9,
+   "H": 123.763466,
+   "p_value": 0.0,
+   "epsilon_sq": 0.415314
+  },
+  {
+   "metric": "i6_price_vs_income_real",
+   "n_municipalities": 283,
+   "n_groups": 9,
+   "H": 77.679545,
+   "p_value": 0.0,
+   "epsilon_sq": 0.275459
+  }
+ ],
+ "clustering": [
+  {
+   "k": 2,
+   "silhouette": 0.3591,
+   "stability_ARI_mean": 0.9721
+  },
+  {
+   "k": 3,
+   "silhouette": 0.2854,
+   "stability_ARI_mean": 0.7639
+  },
+  {
+   "k": 4,
+   "silhouette": 0.2744,
+   "stability_ARI_mean": 0.8371
+  },
+  {
+   "k": 5,
+   "silhouette": 0.2786,
+   "stability_ARI_mean": 0.8326
+  },
+  {
+   "k": 6,
+   "silhouette": 0.2985,
+   "stability_ARI_mean": 0.7927
+  },
+  {
+   "k": 7,
+   "silhouette": 0.2852,
+   "stability_ARI_mean": 0.6556
+  },
+  {
+   "k": 8,
+   "silhouette": 0.2714,
+   "stability_ARI_mean": 0.6726
+  }
+ ],
+ "sensitivity": [
+  {
+   "variant": "income: gross per tax household",
+   "n_both": 299,
+   "spearman_vs_headline": 0.9997,
+   "median_ratio_alt_over_headline": 0.9619,
+   "share_changing_quintile": 0.0201
+  },
+  {
+   "variant": "income: net per taxpayer",
+   "n_both": 299,
+   "spearman_vs_headline": 0.9982,
+   "median_ratio_alt_over_headline": 1.219,
+   "share_changing_quintile": 0.0602
+  },
+  {
+   "variant": "price: new dwellings only",
+   "n_both": 152,
+   "spearman_vs_headline": 0.9266,
+   "median_ratio_alt_over_headline": 1.1592,
+   "share_changing_quintile": 0.3816
+  },
+  {
+   "variant": "price: existing dwellings only",
+   "n_both": 297,
+   "spearman_vs_headline": 0.9915,
+   "median_ratio_alt_over_headline": 0.9649,
+   "share_changing_quintile": 0.1279
+  }
+ ],
+ "rent_gap": {
+  "n": 308,
+  "with_rent": 244
+ }
+}

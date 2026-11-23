@@ -1,0 +1,30 @@
+[project]
+name = "housing-pt"
+version = "0.1.0"
+description = "Portugal housing affordability: reproducible research pipeline"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas>=2.2,<3",
+    "pyarrow>=15,<27",
+    "geopandas>=1.0,<2",
+    "pyogrio>=0.7,<1",
+    "matplotlib>=3.8,<4",
+    "scipy>=1.11,<2",
+    "scikit-learn>=1.4,<2",
+    "libpysal>=4.9,<5",
+    "esda>=2.5,<3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
